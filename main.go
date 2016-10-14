@@ -189,9 +189,15 @@ var cover = &cli.Command{
 	Desc: "Update the artwork for all files with cover.jpg",
 	Argv: func() interface{} { return new(childT) },
 	Fn: func(ctx *cli.Context) error {
+		// argv := ctx.Argv().(*childT)
+		_, err := os.Stat("cover.jpg")
 
-		argv := ctx.Argv().(*childT)
-		ctx.String("Hello, child command, I am %s\n", argv.Name)
+		if err != nil {
+			fmt.Println("could not find file: cover.jpg")
+		} else {
+			fmt.Println("setting cover")
+		}
+
 		return nil
 	},
 }
