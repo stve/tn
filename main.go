@@ -63,7 +63,7 @@ type tagT struct {
 
 var tag = &cli.Command{
 	Name: "tag",
-	Desc: "tag command",
+	Desc: "Set the id3 tags for mp3 files",
 	Argv: func() interface{} { return new(tagT) },
 	Fn: func(ctx *cli.Context) error {
 		argv := ctx.Argv().(*tagT)
@@ -137,7 +137,7 @@ type tagsT struct {
 
 var tags = &cli.Command{
 	Name: "tags",
-	Desc: "tags command",
+	Desc: "Show currently set tags for all mp3 files",
 	Argv: func() interface{} { return new(tagsT) },
 	Fn: func(ctx *cli.Context) error {
 
@@ -175,7 +175,7 @@ var tags = &cli.Command{
 
 var artwork = &cli.Command{
 	Name: "artwork",
-	Desc: "artwork command",
+	Desc: "Set the artwork for a file",
 	Argv: func() interface{} { return new(childT) },
 	Fn: func(ctx *cli.Context) error {
 		argv := ctx.Argv().(*childT)
@@ -186,7 +186,7 @@ var artwork = &cli.Command{
 
 var cover = &cli.Command{
 	Name: "cover",
-	Desc: "cover command",
+	Desc: "Update the artwork for all files with cover.jpg",
 	Argv: func() interface{} { return new(childT) },
 	Fn: func(ctx *cli.Context) error {
 
