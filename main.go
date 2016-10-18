@@ -173,31 +173,116 @@ var tags = &cli.Command{
 	},
 }
 
+// artwork command
+
+type artworkT struct {
+	cli.Helper
+}
+
 var artwork = &cli.Command{
 	Name: "artwork",
 	Desc: "Set the artwork for a file",
-	Argv: func() interface{} { return new(childT) },
+	Argv: func() interface{} { return new(artworkT) },
 	Fn: func(ctx *cli.Context) error {
-		argv := ctx.Argv().(*childT)
-		ctx.String("Hello, child command, I am %s\n", argv.Name)
+
+		files, _ := filepath.Glob("*.mp3")
+		for i := 0; i < len(files); i++ {
+			artworkFilename := strings.Replace(files[i], ".mp3", ".jpg", 1)
+
+			if fileExists(artworkFilename) {
+				fmt.Println("setting artwork on file: " + files[i])
+				err := setPictureTag(artworkFilename, files[i])
+				if err != nil {
+					log.Fatal("could not save artwork", err)
+				}
+			} else {
+				continue
+			}
+		}
+
 		return nil
 	},
+}
+
+// cover command
+
+type coverT struct {
+	cli.Helper
 }
 
 var cover = &cli.Command{
 	Name: "cover",
 	Desc: "Update the artwork for all files with cover.jpg",
-	Argv: func() interface{} { return new(childT) },
+	Argv: func() interface{} { return new(coverT) },
 	Fn: func(ctx *cli.Context) error {
-		// argv := ctx.Argv().(*childT)
-		_, err := os.Stat("cover.jpg")
-
-		if err != nil {
-			fmt.Println("could not find file: cover.jpg")
+		if fileExists("cover.jpg") {
+			files, _ := filepath.Glob("*.mp3")
+			for i := 0; i < len(files); i++ {
+				fmt.Println("setting cover on file: " + files[i])
+				err := setPictureTag("cover.jpg", files[i])
+				if err != nil {
+					log.Fatal("could not save cover", err)
+				}
+			}
 		} else {
-			fmt.Println("setting cover")
+			log.Fatal("could not find file: cover.jpg")
 		}
 
 		return nil
 	},
+}
+
+// helper functions
+
+func setPictureTag(coverFilename string, filename string) error {
+	frontCover, err := os.Open("cover.jpg")
+	if err != nil {
+		return err
+	}
+
+	defer frontCover.Close()
+
+	pic := id3v2.PictureFrame{
+		Encoding:    id3v2.ENUTF8,
+		MimeType:    "image/jpeg",
+		Picture:     frontCover,
+		PictureType: id3v2.PTFrontCover,
+	}
+
+	// Open file and find tag in it
+	tag, err := id3v2.Open(filename)
+	if err != nil {
+		return err
+	}
+
+	defer tag.Close()
+	tag.DeleteAllFrames()
+	tag.AddAttachedPicture(pic)
+
+	fmt.Println("picture saved")
+
+	err = tag.Save()
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func fileExists(filename string) bool {
+	_, err := os.Stat(filename)
+	if err != nil {
+		return true
+	}
+
+	return false
+}
+
+func checkNotEmpty(str string) bool {
+	if len(str) > 0 {
+		return true
+	}
+
+	return false
 }
