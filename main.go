@@ -97,8 +97,24 @@ var tag = &cli.Command{
 						log.Fatal("Error while opening mp3 file: ", terr)
 					}
 					defer mp3File.Close()
+
+					mp3File.SetArtist(trackInfo[0])
+					mp3File.SetTitle(trackInfo[1])
+
+					// _, serr := mp3File.Save()
+					// if serr != nil {
+					// 	log.Fatal("error while saving mp3 file ", serr)
+					// }
 				} else {
 					defer tag.Close()
+
+					tag.SetArtist(trackInfo[0])
+					tag.SetTitle(trackInfo[1])
+
+					saveerr := tag.Save()
+					if saveerr != nil {
+						log.Fatal("error while saving mp3 file ", saveerr)
+					}
 
 				}
 			}
@@ -112,16 +128,23 @@ var tag = &cli.Command{
 			defer tag.Close()
 
 			// if artist flag
-			tag.SetArtist(argv.Artist)
+			if checkNotEmpty(argv.Artist) {
+				tag.SetArtist(argv.Artist)
+			}
 
 			// if album flag
-			tag.SetAlbum(argv.Album)
+			if checkNotEmpty(argv.Album) {
+				tag.SetAlbum(argv.Album)
+			}
 
 			// if song flag
-			tag.SetTitle(argv.Title)
+			if checkNotEmpty(argv.Title) {
+				tag.SetTitle(argv.Title)
+			}
 
-			if err = tag.Save(); err != nil {
-				log.Fatal("Error while saving a tag: ", err)
+			sverr := tag.Save()
+			if sverr != nil {
+				log.Fatal("error while saving mp3 file ", sverr)
 			}
 		}
 
@@ -149,6 +172,7 @@ var tags = &cli.Command{
 			// Open file and find tag in it
 			tag, err := id3v2.Open(files[i])
 			if err != nil {
+				fmt.Println("id3v2 failed, falling back")
 				mp3File, terr := id3.Open(files[i])
 				if terr != nil {
 					log.Fatal("Error while opening mp3 file: ", terr)
