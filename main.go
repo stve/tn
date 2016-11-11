@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/bogem/id3v2"
+	"github.com/everdev/mack"
 	"github.com/mikkyang/id3-go"
 	"github.com/mkideal/cli"
 )
@@ -19,6 +20,7 @@ func main() {
 		cli.Tree(tags),
 		cli.Tree(cover),
 		cli.Tree(artwork),
+		cli.Tree(itunes),
 	).Run(os.Args[1:]); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
@@ -250,6 +252,30 @@ var cover = &cli.Command{
 			}
 		} else {
 			log.Fatal("could not find file: cover.jpg")
+		}
+
+		return nil
+	},
+}
+
+// itunes command
+
+type itunesT struct {
+	cli.Helper
+}
+
+var itunes = &cli.Command{
+	Name: "itunes",
+	Desc: "Add mp3s to iTunes",
+	Argv: func() interface{} { return new(itunesT) },
+	Fn: func(ctx *cli.Context) error {
+		files, _ := filepath.Glob("*.mp3")
+		for i := 0; i < len(files); i++ {
+			fmt.Println("Adding " + files[i])
+			err := mack.Tell("iTunes", "add (POSIX file \""+files[i]+"\"")
+			if err != nil {
+				fmt.Println("Error adding " + files[i])
+			}
 		}
 
 		return nil
