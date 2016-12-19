@@ -18,18 +18,18 @@ var artwork = &cli.Command{
 	Desc: "Set the artwork for a file",
 	Argv: func() interface{} { return new(artworkT) },
 	Fn: func(ctx *cli.Context) error {
-
 		files, _ := filepath.Glob("*.mp3")
 		for i := 0; i < len(files); i++ {
 			artworkFilename := strings.Replace(files[i], ".mp3", ".jpg", 1)
-			if fileExists(artworkFilename) {
-				fmt.Println("setting artwork on file: " + files[i])
-				err := setPicture(files[i], artworkFilename)
-				if err != nil {
-					log.Fatal("could not save artwork", err)
-				}
-			} else {
+
+			if !(fileExists(artworkFilename)) {
 				continue
+			}
+
+			fmt.Println("setting artwork on file: " + files[i])
+			err := setPicture(files[i], artworkFilename)
+			if err != nil {
+				log.Fatal("could not save artwork", err)
 			}
 		}
 
