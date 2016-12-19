@@ -13,7 +13,6 @@ import (
 func main() {
 	if err := cli.Root(root,
 		cli.Tree(help),
-		cli.Tree(art),
 		cli.Tree(artwork),
 		cli.Tree(cover),
 		cli.Tree(itunes),

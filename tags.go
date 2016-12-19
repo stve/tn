@@ -12,6 +12,7 @@ import (
 
 type tagsT struct {
 	cli.Helper
+	Artwork bool `cli:"artwork" usage:"list artwork (if present)"`
 }
 
 var tags = &cli.Command{
@@ -19,6 +20,7 @@ var tags = &cli.Command{
 	Desc: "Show currently set tags for all mp3 files",
 	Argv: func() interface{} { return new(tagsT) },
 	Fn: func(ctx *cli.Context) error {
+		argv := ctx.Argv().(*tagsT)
 
 		files, _ := filepath.Glob("*.mp3")
 		for i := 0; i < len(files); i++ {
@@ -46,6 +48,25 @@ var tags = &cli.Command{
 				fmt.Println("  Artist: " + tag.Artist())
 				fmt.Println("  Title: " + tag.Title())
 				fmt.Println("  Album: " + tag.Album())
+
+				if argv.Artwork {
+					pictures := tag.GetFrames(tag.CommonID("Attached picture"))
+					if pictures != nil {
+						for _, f := range pictures {
+							pic, ok := f.(id3v2.PictureFrame)
+							if !ok {
+								log.Fatal("Couldn't assert picture frame")
+							}
+
+							// Do some operations with picture frame:
+							fmt.Println("  Cover: " + pic.Description) // For example, print description of picture frame
+							// _, rerr := ioutil.ReadAll(pic.Picture) // Or read a picture from picture frame
+							// if rerr != nil {
+							// 	log.Fatal("Error while reading a picture from picture frame: ", rerr)
+							// }
+						}
+					}
+				}
 			}
 		}
 
