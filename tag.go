@@ -17,6 +17,7 @@ type tagT struct {
 	Artist string `cli:"artist" usage:"Artist name"`
 	Album  string `cli:"album" usage:"Album name"`
 	Title  string `cli:"title" usage:"Song name"`
+	File   string `cli:"file" usage:"A specific file to tag"`
 }
 
 var tag = &cli.Command{
@@ -26,37 +27,28 @@ var tag = &cli.Command{
 	Fn: func(ctx *cli.Context) error {
 		argv := ctx.Argv().(*tagT)
 
-		ctx.String("auto=%v, artist=%s, album=%s, title=%s\n", argv.Auto, argv.Artist, argv.Album, argv.Title)
+		ctx.String("auto=%v, artist=%s, album=%s, title=%s, file=%s\n", argv.Auto, argv.Artist, argv.Album, argv.Title, argv.File)
 
 		if argv.Auto {
 			autoTag()
-		} else {
-			// Open file and find tag in it
-			tag, err := id3v2.Open("file.mp3")
+			return nil
+		}
+
+		if checkNotEmpty(argv.File) {
+			return saveData(argv.File, argv.Artist, argv.Album, argv.Title)
+		}
+
+		files, _ := filepath.Glob("*.mp3")
+		for i := 0; i < len(files); i++ {
+
+			fmt.Println("\n************************************")
+			fmt.Println("File: " + files[i] + ":")
+
+			err := saveData(files[i], argv.Artist, argv.Album, argv.Title)
 			if err != nil {
-				log.Fatal("Error while opening mp3 file: ", err)
-			}
-			defer tag.Close()
-
-			// if artist flag
-			if checkNotEmpty(argv.Artist) {
-				tag.SetArtist(argv.Artist)
+				log.Println("Error!")
 			}
 
-			// if album flag
-			if checkNotEmpty(argv.Album) {
-				tag.SetAlbum(argv.Album)
-			}
-
-			// if song flag
-			if checkNotEmpty(argv.Title) {
-				tag.SetTitle(argv.Title)
-			}
-
-			sverr := tag.Save()
-			if sverr != nil {
-				log.Fatal("error while saving mp3 file ", sverr)
-			}
 		}
 
 		return nil
@@ -82,34 +74,56 @@ func autoTag() {
 		fmt.Println("  Artist: " + trackInfo[0])
 		fmt.Println("  Title: " + trackInfo[1])
 
-		tag, err := id3v2.Open(files[i])
+		err := saveData(files[i], trackInfo[0], "", trackInfo[1])
 		if err != nil {
-			mp3File, terr := id3.Open(files[i])
-			if terr != nil {
-				log.Fatal("Error while opening mp3 file: ", terr)
-			}
-			defer mp3File.Close()
-
-			mp3File.SetArtist(trackInfo[0])
-			mp3File.SetTitle(trackInfo[1])
-
-			// _, serr := mp3File.Save()
-			// if serr != nil {
-			// 	log.Fatal("error while saving mp3 file ", serr)
-			// }
-		} else {
-			defer tag.Close()
-
-			tag.SetArtist(trackInfo[0])
-			tag.SetTitle(trackInfo[1])
-
-			saveerr := tag.Save()
-			if saveerr != nil {
-				log.Fatal("error while saving mp3 file ", saveerr)
-			}
-
+			log.Println("Error!")
 		}
 	}
+}
+
+func saveData(filename string, artist string, album string, title string) error {
+	tag, err := id3v2.Open(filename)
+	if err != nil {
+		mp3File, terr := id3.Open(filename)
+		if terr != nil {
+			log.Fatal("Error while opening mp3 file: ", terr)
+		}
+		defer mp3File.Close()
+
+		if checkNotEmpty(artist) {
+			mp3File.SetArtist(artist)
+		}
+
+		if checkNotEmpty(album) {
+			mp3File.SetAlbum(album)
+		}
+
+		if checkNotEmpty(title) {
+			mp3File.SetTitle(title)
+		}
+
+	} else {
+		defer tag.Close()
+
+		if checkNotEmpty(artist) {
+			tag.SetArtist(artist)
+		}
+
+		if checkNotEmpty(album) {
+			tag.SetAlbum(album)
+		}
+
+		if checkNotEmpty(title) {
+			tag.SetTitle(title)
+		}
+
+		saveerr := tag.Save()
+		if saveerr != nil {
+			log.Fatal("error while saving mp3 file ", saveerr)
+		}
+	}
+
+	return nil
 }
 
 func checkNotEmpty(str string) bool {
