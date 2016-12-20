@@ -125,7 +125,3 @@ func saveData(filename string, artist string, album string, title string) error 
 
 	return nil
 }
-
-func checkNotEmpty(str string) bool {
-	return (len(str) > 0)
-}
