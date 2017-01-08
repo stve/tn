@@ -29,6 +29,14 @@ Owsey - And Then I Woke Up.jpg
 Owsey - And Then I Woke Up.mp3
 ```
 
+### Clear
+
+Removes all existing id3 tags from all mp3s in the current directory.
+
+```go
+tn clear
+```
+
 ### Cover
 
 Set the cover image for a group of mp3 files in a directory. Assumes an image `cover.jpg` exists in the directory in which you are running the command.

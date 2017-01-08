@@ -11,7 +11,13 @@ import (
 // helper functions
 
 func setPicture(coverFilename string, filename string) error {
-	frontCover, err := ioutil.ReadFile(coverFilename)
+	frontCover, err := os.Open(coverFilename)
+	if err != nil {
+		return err
+	}
+	defer frontCover.Close()
+
+	frontCoverBytes, err := ioutil.ReadAll(frontCover)
 	if err != nil {
 		return err
 	}
@@ -19,9 +25,9 @@ func setPicture(coverFilename string, filename string) error {
 	pic := id3v2.PictureFrame{
 		Encoding:    id3v2.ENUTF8,
 		MimeType:    "image/jpeg",
-		Picture:     frontCover,
+		Picture:     frontCoverBytes,
 		PictureType: id3v2.PTFrontCover,
-		Description: "Front Cover",
+		Description: "Cover",
 	}
 
 	// Open file and find tag in it
@@ -42,6 +48,21 @@ func setPicture(coverFilename string, filename string) error {
 
 	if err = tag.Close(); err != nil {
 		log.Fatal("Error while closing a tag:", err)
+	}
+
+	return nil
+}
+
+func clearTags(filename string) error {
+	tag, err := id3v2.Open(filename)
+	if err != nil {
+		log.Fatal("error opening mp3 file", err)
+	}
+	defer tag.Close()
+
+	tag.DeleteAllFrames()
+	if err = tag.Save(); err != nil {
+		log.Fatal("Error while saving a tag:", err)
 	}
 
 	return nil

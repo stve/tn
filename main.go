@@ -11,6 +11,7 @@ func main() {
 	if err := cli.Root(root,
 		cli.Tree(help),
 		cli.Tree(artwork),
+		cli.Tree(clear),
 		cli.Tree(cover),
 		cli.Tree(itunes),
 		cli.Tree(tag),
