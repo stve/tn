@@ -27,7 +27,7 @@ var tag = &cli.Command{
 	Fn: func(ctx *cli.Context) error {
 		argv := ctx.Argv().(*tagT)
 
-		ctx.String("auto=%v, artist=%s, album=%s, title=%s, file=%s\n", argv.Auto, argv.Artist, argv.Album, argv.Title, argv.File)
+		// ctx.String("auto=%v, artist=%s, album=%s, title=%s, file=%s\n", argv.Auto, argv.Artist, argv.Album, argv.Title, argv.File)
 
 		if argv.Auto {
 			autoTag()
