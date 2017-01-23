@@ -27,7 +27,7 @@ var artwork = &cli.Command{
 			}
 
 			fmt.Println("setting artwork on file: " + files[i])
-			err := setPicture(files[i], artworkFilename)
+			err := setPicture(artworkFilename, files[i])
 			if err != nil {
 				log.Fatal("could not save artwork", err)
 			}
