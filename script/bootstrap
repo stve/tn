@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+set -e
+
+STATUS=0
+
+if ! go version; then
+  echo "You need to install Go 1.6 or higher to build scar" >&2
+  STATUS=1
+fi
+
+go get github.com/mkideal/cli
+go get github.com/everdev/mack
+go get github.com/bogem/id3v2
+go get github.com/mikkyang/id3-go
+
+if [ $STATUS -eq 0 ]; then
+  echo "Everything OK."
+fi
+
+exit $STATUS
