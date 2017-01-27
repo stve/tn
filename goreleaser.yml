@@ -1,0 +1,11 @@
+build:
+  main: main.go
+  binary_name: tn
+  goos:
+    - windows
+    - darwin
+    - linux
+
+brew:
+  repo: stve/homebrew-formulae
+  folder: Formula
