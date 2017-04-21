@@ -1,11 +1,13 @@
 build:
   main: main.go
-  binary_name: tn
+  binary: tn
   goos:
     - windows
     - darwin
     - linux
 
 brew:
-  repo: stve/homebrew-formulae
+  github: 
+    owner: stve
+    name: homebrew-formulae
   folder: Formula
