@@ -1,4 +1,4 @@
-package main
+package tags
 
 import (
 	"io/ioutil"
@@ -23,7 +23,7 @@ func setPicture(coverFilename string, filename string) error {
 	}
 
 	pic := id3v2.PictureFrame{
-		Encoding:    id3v2.ENUTF8,
+		Encoding:    id3v2.EncodingUTF8,
 		MimeType:    "image/jpeg",
 		Picture:     frontCoverBytes,
 		PictureType: id3v2.PTFrontCover,
@@ -31,7 +31,7 @@ func setPicture(coverFilename string, filename string) error {
 	}
 
 	// Open file and find tag in it
-	tag, err := id3v2.Open(filename)
+	tag, err := id3v2.Open(filename, id3v2.Options{Parse: false})
 	if err != nil {
 		return err
 	}
@@ -54,7 +54,7 @@ func setPicture(coverFilename string, filename string) error {
 }
 
 func clearTags(filename string) error {
-	tag, err := id3v2.Open(filename)
+	tag, err := id3v2.Open(filename, id3v2.Options{Parse: true})
 	if err != nil {
 		log.Fatal("error opening mp3 file", err)
 	}
