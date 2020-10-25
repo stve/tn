@@ -3,6 +3,7 @@ package tags
 import (
 	"fmt"
 	"io/ioutil"
+	"log"
 	"os"
 	"os/exec"
 	"path"
@@ -11,11 +12,9 @@ import (
 	"sync"
 )
 
-const dir = "."
-
 var fileFormats = [2]string{".wav", ".aif"}
 
-func filesOfType(ext string, overwriteExisting bool) []string {
+func filesOfType(dir string, ext string, overwriteExisting bool) []string {
 	files, err := ioutil.ReadDir(dir)
 	if err != nil {
 		fmt.Print(err)
@@ -54,7 +53,6 @@ func filesOfType(ext string, overwriteExisting bool) []string {
 func convert(path string, wg *sync.WaitGroup) {
 	extension := filepath.Ext(path)
 	newPath := strings.Replace(path, extension, ".mp3", 1)
-	fmt.Printf("lame --silent -b 320 -h -V2 %s %s\n", path, newPath)
 	cmd := exec.Command("lame", "--silent", "-b 320", "-h", "-V2", path, newPath)
 
 	if output, err := cmd.CombinedOutput(); err != nil {
@@ -69,20 +67,24 @@ func convert(path string, wg *sync.WaitGroup) {
 
 // Format - a command to format files
 func Format(overwriteExisting bool) {
-	fmt.Printf("overwriteExisting is %v\n", overwriteExisting)
-	var files []string
+	dir, err := os.Getwd()
+	if err != nil {
+		log.Println(err)
+		return
+	}
 
+	var files []string
 	for _, format := range fileFormats {
 		fmt.Printf("Detecting %s files...\n", format)
 
-		filesToConvert := filesOfType(format, overwriteExisting)
+		filesToConvert := filesOfType(dir, format, overwriteExisting)
 		if len(filesToConvert) > 0 {
 			files = append(files, filesToConvert...)
 		}
 	}
 
 	if len(files) == 0 {
-		fmt.Println("No files were found.")
+		fmt.Println("No files were found, exiting...")
 		return
 	}
 
