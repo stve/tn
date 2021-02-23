@@ -2,7 +2,7 @@
 
 An experiment in writing a golang CLI to replace some of my [ruby scripts](https://github.com/stve/bin) for managing/manipulating mp3s.
 
-*Note:* These scripts are fairly customized to my use-case. This is also my first time writing Go so I suspect the code is all sorts of busted.
+*Note:* These scripts are fairly customized to my use-case.
 
 ## Usage
 
