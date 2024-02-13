@@ -2,12 +2,12 @@
 
 
 [[projects]]
-  digest = "1:0ea8bf8ffa04c2f24cc7edca356f02df9e66d6230bbd77f5984adc55319e400b"
+  digest = "1:6dee9a9d22905db564a614779446cfc68d61c65b24400efe7112109dae14eccf"
   name = "github.com/bogem/id3v2"
   packages = ["."]
   pruneopts = "UT"
-  revision = "c8c2e7f95f57e21e6f6add5405f9e5e22746b583"
-  version = "v1.1.1"
+  revision = "8403eb1ef13ff7da9c23004cfc2fd8b9c6f6c7b0"
+  version = "v1.2.0"
 
 [[projects]]
   branch = "master"
@@ -19,11 +19,11 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:4e6d6cb76aad8cb46dd775fe33ac1c0360f0c528ee091ff8aac2432c4968d351"
+  digest = "1:0463822dc2da371979a477b1228d2b9b395382ff9b67c35fffdbdc25a4257c87"
   name = "github.com/everdev/mack"
   packages = ["."]
   pruneopts = "UT"
-  revision = "83ad607f6010022cba72d751587439fd79277cc9"
+  revision = "15be3d47cc5486b94cb9c49a967c8343851e72ca"
 
 [[projects]]
   digest = "1:870d441fe217b8e689d7949fef6e43efbc787e50f200cb1e70dbca9204a1d6be"
@@ -35,7 +35,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:2edaefcd8d907bb3dc42b232b51e38860b9f1bb5c502717aac4690aa860cd0bc"
+  digest = "1:872d74a3edeb9608156a8d231a0adb629778942e1bcaeda715bf0c5749d6dc51"
   name = "github.com/mikkyang/id3-go"
   packages = [
     ".",
@@ -44,26 +44,26 @@
     "v2",
   ]
   pruneopts = "UT"
-  revision = "0168d962f1d773af3e29867138593203b653782e"
+  revision = "2c6ab3bb1fbdd007e21aebfb56a4f652ecdf7fc3"
 
 [[projects]]
-  digest = "1:e096613fb7cf34743d49af87d197663cfccd61876e2219853005a57baedfa562"
+  digest = "1:1e80255eea46af2e2db7da90f95e4b5cfe84f3b58d9a8598ec35b0f2a75c60e4"
   name = "github.com/spf13/cobra"
   packages = ["."]
   pruneopts = "UT"
-  revision = "f2b07da1e2c38d5f12845a4f607e2e1018cbb1f5"
-  version = "v0.0.5"
+  revision = "6607e6b8603f56adb027298ee6695e06ffb3a819"
+  version = "0.0.7"
 
 [[projects]]
-  digest = "1:c1b1102241e7f645bc8e0c22ae352e8f0dc6484b6cb4d132fa9f24174e0119e2"
+  digest = "1:524b71991fc7d9246cc7dc2d9e0886ccb97648091c63e30eef619e6862c955dd"
   name = "github.com/spf13/pflag"
   packages = ["."]
   pruneopts = "UT"
-  revision = "298182f68c66c05229eb03ac171abe6e309ee79a"
-  version = "v1.0.3"
+  revision = "2e9d26c8c37aae03e3f9d4e90b7116f5accb7cab"
+  version = "v1.0.5"
 
 [[projects]]
-  digest = "1:75f95b3d3c735d31d24e0efc9e544eec35b93f406c1423f056cdd5e1ce0ac42a"
+  digest = "1:d643c9cca50b55140470fd91b43d211f47c27450f1508b645cc548532de9d162"
   name = "golang.org/x/text"
   packages = [
     "encoding",
@@ -78,8 +78,8 @@
     "unicode/cldr",
   ]
   pruneopts = "UT"
-  revision = "342b2e1fbaa52c93f31447ad2c6abc048c63e475"
-  version = "v0.3.2"
+  revision = "22f1617af38ed4cd65b3b96e02bab267e560155c"
+  version = "v0.3.4"
 
 [solve-meta]
   analyzer-name = "dep"

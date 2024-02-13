@@ -53,7 +53,7 @@ func filesOfType(dir string, ext string, overwriteExisting bool) []string {
 func convert(path string, wg *sync.WaitGroup) {
 	extension := filepath.Ext(path)
 	newPath := strings.Replace(path, extension, ".mp3", 1)
-	cmd := exec.Command("lame", "--silent", "-b 320", "-h", "-V2", path, newPath)
+	cmd := exec.Command("lame", "--silent", "--cbr", "-b 320", "-h", "-V4", path, newPath)
 
 	if output, err := cmd.CombinedOutput(); err != nil {
 		fmt.Println("Build:", err)

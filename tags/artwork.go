@@ -26,12 +26,12 @@ func Artwork() {
 	}
 }
 
+// Cover sets the artwork of all mp3s in the current directory to the contents of cover.jpg
 func Cover(filename string) {
-	var coverImage string
+	coverImage := defaultCoverImage
+
 	if checkNotEmpty(filename) {
 		coverImage = filename
-	} else {
-		coverImage = defaultCoverImage
 	}
 
 	if fileExists(coverImage) {
